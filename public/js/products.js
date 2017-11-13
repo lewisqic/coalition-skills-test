@@ -12,7 +12,7 @@ $(document).ready(function() {
             },
             success: function(data) {
                 // reset form
-                $('#add_product_form input').val('');
+                $('#add_product_form input:visible').val('');
                 // set our updated products data
                 var products = JSON.stringify(data.all_products);
                 $('#list_products').attr('data-products', products);
