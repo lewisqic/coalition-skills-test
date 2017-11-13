@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+/**
+ * Public site routes
+ */
+Route::group(['namespace' => 'Index'], function () {
+    Route::get('/', ['uses' => 'IndexIndexController@showProducts']);
+    Route::post('/', ['uses' => 'IndexIndexController@addProduct']);
 });
