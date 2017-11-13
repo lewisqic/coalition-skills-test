@@ -27,9 +27,10 @@ class ProductService extends BaseService
 
         // create our new product
         $new_product = [
+            'id' => uniqid(),
             'name' => $data['name'],
-            'quantity' => $data['quantity'],
-            'price' => $data['price'],
+            'quantity' => (float)$data['quantity'],
+            'price' => (float)$data['price'],
             'created_at' => time()
         ];
         $products[] = $new_product;
@@ -38,6 +39,54 @@ class ProductService extends BaseService
         file_put_contents(app_path('products.json'), json_encode($products));
 
         return $new_product;
+
+    }
+
+    /**
+     * delete a product
+     * @return array
+     */
+    public function delete($id)
+    {
+
+        // get existing products
+        $products = json_decode(file_get_contents(app_path('products.json')), true);
+
+        // delete the product
+        foreach ( $products as $key => $product ) {
+            if ( $product['id'] == $id ) {
+                unset($products[$key]);
+                break;
+            }
+        }
+
+        // save products file
+        file_put_contents(app_path('products.json'), json_encode($products));
+
+
+    }
+
+    /**
+     * delete a product
+     * @return array
+     */
+    public function update($id, $data)
+    {
+
+        // get existing products
+        $products = json_decode(file_get_contents(app_path('products.json')), true);
+
+        // update the product
+        foreach ( $products as $key => $product ) {
+            if ( $product['id'] == $id ) {
+                $products[$key]['name'] = $data['name'];
+                $products[$key]['quantity'] = (float)$data['quantity'];
+                $products[$key]['price'] = (float)$data['price'];
+            }
+        }
+
+        // save products file
+        file_put_contents(app_path('products.json'), json_encode($products));
 
     }
 
@@ -65,10 +114,11 @@ class ProductService extends BaseService
         foreach ( $products as $product ) {
             $products_list['grand_total'] += $product['quantity'] * $product['price'];
             $products_list['products'][] = [
+                'id' => $product['id'],
                 'name' => $product['name'],
                 'quantity' => $product['quantity'],
-                'price' => number_format($product['price'], 2),
-                'total' => number_format($product['quantity'] * $product['price'], 2),
+                'price' => number_format((float)$product['price'], 2),
+                'total' => number_format((float)$product['quantity'] * (float)$product['price'], 2),
                 'created_at_formatted' => date('Y-m-d H:i:s', $product['created_at']),
             ];
         }
@@ -79,6 +129,8 @@ class ProductService extends BaseService
 
 
     }
+
+
 
     /**
      * create products file

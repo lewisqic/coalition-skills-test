@@ -64,6 +64,48 @@ class IndexIndexController extends Controller
 
     }
 
+    /**
+     * delete a product
+     *
+     * @return json
+     */
+    public function deleteProduct()
+    {
+
+        $data = \Request::all();
+        $product = $this->productService->delete($data['id']);
+        $products = $this->productService->listAll();
+
+        $response = [
+            'success' => true,
+            'all_products' => $products
+        ];
+        return response()->json($response);
+
+
+    }
+
+    /**
+     * update a product
+     *
+     * @return json
+     */
+    public function updateProduct()
+    {
+
+        $data = \Request::all();
+        $product = $this->productService->update($data['id'], $data);
+        $products = $this->productService->listAll();
+
+        $response = [
+            'success' => true,
+            'all_products' => $products
+        ];
+        return response()->json($response);
+
+
+    }
+
 
 
 

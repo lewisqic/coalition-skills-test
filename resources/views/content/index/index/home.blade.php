@@ -51,86 +51,25 @@
             <th>Price per item</th>
             <th>Datetime submitted</th>
             <th>Total value number</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
         {{-- rows inserted via ajax --}}
-        <tr class="no-results">
-            <td class="text-center" colspan="5"><em class="text-muted">No Results Found</em></td>
-        </tr>
     </tbody>
     <tfoot>
+        <tr class="no-results">
+            <td class="text-center" colspan="6"><em class="text-muted">No Results Found</em></td>
+        </tr>
         <tr class="results-found" style="display: none;">
-            <td colspan="5" class="text-right">TOTAL: $<span class="grand-total"></span></td>
+            <td colspan="6" class="text-right">TOTAL: $<span class="grand-total"></span></td>
         </tr>
     </tfoot>
 </table>
 
+
 @endsection
 
 @push('scripts')
-
-    <script type="text/javascript">
-
-        $(document).ready(function() {
-
-            $('#add_product_form').on('submit', function(e) {
-                e.preventDefault();
-                // ajax submit our product form
-                $('#add_product_form').ajaxSubmit({
-                    dataType: 'json',
-                    beforeSubmit: function() {
-
-                    },
-                    success: function(data) {
-                        // reset form
-                        $('#add_product_form input').val('');
-                        // set our updated products data
-                        var products = JSON.stringify(data.all_products);
-                        $('#list_products').attr('data-products', products);
-                        loadProducts();
-                    }
-                });
-                return false;
-            });
-
-            // load our products list
-            var loadProducts = function() {
-
-                var data = JSON.parse($('#list_products').attr('data-products'));
-                
-                var grandTotal = data.grand_total;
-                var products = data.products;
-
-                if ( products.length ) {
-
-                    $('.no-results').hide();
-                    $('.results-found').show();
-                    $('.grand-total').html(grandTotal);
-                    $('#list_products tbody').empty();
-
-                    // load our product rows
-                    var rows = '';
-                    $(products).each(function(index, product) {
-                        rows += '<tr>' +
-                                    '<td>' + product.name + '</td>' +
-                                    '<td>' + product.quantity + '</td>' +
-                                    '<td>$' + product.price + '</td>' +
-                                    '<td>' + product.created_at_formatted + '</td>' +
-                                    '<td>$' + product.total + '</td>' +
-                              '</tr>';
-                    });
-                    $('#list_products tbody').append(rows);
-
-                }
-
-
-            };
-
-            loadProducts();
-
-        });
-
-    </script>
-
+    <script src="/js/products.js"></script>
 @endpush

@@ -17,4 +17,6 @@
 Route::group(['namespace' => 'Index'], function () {
     Route::get('/', ['uses' => 'IndexIndexController@showProducts']);
     Route::post('/', ['uses' => 'IndexIndexController@addProduct']);
+    Route::post('delete', ['uses' => 'IndexIndexController@deleteProduct']);
+    Route::post('update', ['uses' => 'IndexIndexController@updateProduct']);
 });
